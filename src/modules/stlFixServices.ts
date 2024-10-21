@@ -1,4 +1,9 @@
-export const getSlugsApi = async (token, pageSize = 24, productsPage = 1) => {
+export const getSlugsApi = async (
+  token,
+  pageSize = 24,
+  productsPage = 1,
+  filters = null
+) => {
   const myHeaders = new Headers();
   myHeaders.append(
     "User-Agent",
@@ -18,16 +23,25 @@ export const getSlugsApi = async (token, pageSize = 24, productsPage = 1) => {
   myHeaders.append("Priority", "u=4");
   myHeaders.append("TE", "trailers");
 
-  const graphql = JSON.stringify({
+  let graphqlQuery = {
     query:
       "query GET_LIST_PRODUCTS($filters: ProductFiltersInput, $productsPage: Int, $productsPageSize: Int, $sort: [String]) {\n  products(\n    filters: $filters\n    pagination: {page: $productsPage, pageSize: $productsPageSize}\n    sort: $sort\n  ) {\n    data {\n      id\n      attributes {\n        name\n        slug\n        thumbnail {\n          ...mediaData\n          __typename\n        }\n        hover {\n          ...mediaData\n          __typename\n        }\n        categories {\n          data {\n            id\n            attributes {\n              slug\n              name\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        tags {\n          data {\n            id\n            attributes {\n              slug\n              name\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment mediaData on UploadFileEntityResponse {\n  data {\n    attributes {\n      alternativeText\n      url\n      __typename\n    }\n    __typename\n  }\n  __typename\n}",
     variables: {
-      filters: { release_date: { lte: "2024-10-20T21:26:21.000Z" } },
+      filters: {
+        release_date: { lte: "2024-10-20T21:26:21.000Z" },
+        categories: filters.categories,
+      },
       productsPage: productsPage,
       productsPageSize: pageSize,
       sort: "release_date:DESC",
     },
-  });
+  };
+
+  if (!filters == null)
+    graphqlQuery.variables.filters.categories = filters.categories;
+
+  const graphql = JSON.stringify(graphqlQuery);
+
   const requestOptions = {
     method: "POST",
     headers: myHeaders,
@@ -182,8 +196,6 @@ export const fetchDownloadFileUrl = async (token, productsIds) => {
       products[i].video = productsIds[i].video;
     }
   }
-
-  console.log("PRODUCTS----", products);
 
   return products;
 };

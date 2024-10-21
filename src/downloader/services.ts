@@ -160,8 +160,6 @@ export const downloadFile = async (file: IDownloadFile) => {
   await downloadStlThumbnail(file);
   await downloadStlVideo(file);
 
-  console.log("FF", file);
-
   if (!file?.galery?.length) {
     console.log("SEM GALERIA");
     return;

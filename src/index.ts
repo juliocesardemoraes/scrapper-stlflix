@@ -37,14 +37,23 @@ import { downloadFile } from "./downloader/services.js";
   //   const res = await getSlugsApi(jwt, 24, 1);
   //   const res2 = await getSlugsApi(jwt, 24, 2);
   //   datas.push(res2.data.products.data);
+  const INITIAL_PAGE = 1; // 0 é page 1
+  const TOTAL_PAGES = 3;
 
-  for (let i = 0; i < 2; i++) {
-    const res = await getSlugsApi(jwt, 24, i + 1);
+  for (let i = INITIAL_PAGE; i < TOTAL_PAGES; i++) {
+    const res = await getSlugsApi(jwt, 24, i, {
+      categories: {
+        slug: {
+          eq: "animals",
+        },
+      },
+    });
     datas.push(res.data.products.data);
   }
   datas = datas.flat();
 
   const slugs = await getSlugs(datas);
+  console.log("SLUGS", slugs.sort());
   const productIds = await getProductId(jwt, slugs);
   const fileUrls = await fetchDownloadFileUrl(jwt, productIds);
 
