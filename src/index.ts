@@ -39,15 +39,18 @@ import { downloadFile } from "./downloader/services.js";
   //   datas.push(res2.data.products.data);
   const INITIAL_PAGE = 1; // 0 é page 1
   const TOTAL_PAGES = 3;
+  let categories = null;
+
+  // categories = {
+  //   categories: {
+  //     slug: {
+  //       eq: "animals",
+  //     },
+  //   },
+  // };
 
   for (let i = INITIAL_PAGE; i < TOTAL_PAGES; i++) {
-    const res = await getSlugsApi(jwt, 24, i, {
-      categories: {
-        slug: {
-          eq: "animals",
-        },
-      },
-    });
+    const res = await getSlugsApi(jwt, 24, i, categories);
     datas.push(res.data.products.data);
   }
   datas = datas.flat();
