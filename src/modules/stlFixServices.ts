@@ -23,13 +23,12 @@ export const getSlugsApi = async (
   myHeaders.append("Priority", "u=4");
   myHeaders.append("TE", "trailers");
 
-  let graphqlQuery = {
+  let graphqlQuery: any = {
     query:
       "query GET_LIST_PRODUCTS($filters: ProductFiltersInput, $productsPage: Int, $productsPageSize: Int, $sort: [String]) {\n  products(\n    filters: $filters\n    pagination: {page: $productsPage, pageSize: $productsPageSize}\n    sort: $sort\n  ) {\n    data {\n      id\n      attributes {\n        name\n        slug\n        thumbnail {\n          ...mediaData\n          __typename\n        }\n        hover {\n          ...mediaData\n          __typename\n        }\n        categories {\n          data {\n            id\n            attributes {\n              slug\n              name\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        tags {\n          data {\n            id\n            attributes {\n              slug\n              name\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment mediaData on UploadFileEntityResponse {\n  data {\n    attributes {\n      alternativeText\n      url\n      __typename\n    }\n    __typename\n  }\n  __typename\n}",
     variables: {
       filters: {
         release_date: { lte: "2024-10-20T21:26:21.000Z" },
-        categories: filters.categories,
       },
       productsPage: productsPage,
       productsPageSize: pageSize,
