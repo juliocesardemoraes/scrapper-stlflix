@@ -64,12 +64,15 @@ const fetchData = (requestOptions) => {
       .then((response) => response.json())
       .then((data) => {
         resolve({
-          id: data.data.products.data[0].attributes.files[1].file.data.id,
+          id: data?.data?.products?.data?.[0]?.attributes?.files[1]?.file?.data
+            ?.id,
           thumbnail:
-            data.data.products.data[0].attributes.thumbnail.data.attributes.url,
-          galery: data.data.products.data[0].attributes.gallery.data,
+            data?.data?.products?.data?.[0]?.attributes?.thumbnail?.data
+              ?.attributes?.url,
+          galery: data?.data?.products?.data?.[0]?.attributes?.gallery?.data,
           video:
-            data.data.products.data[0].attributes.hover.data.attributes.url,
+            data?.data?.products?.data?.[0]?.attributes?.hover?.data?.attributes
+              ?.url,
         });
       })
       .catch((error) => {
