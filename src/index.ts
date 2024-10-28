@@ -41,13 +41,13 @@ import { downloadFile } from "./downloader/services.js";
   const TOTAL_PAGES = 3;
   let categories = null;
 
-  // categories = {
-  //   categories: {
-  //     slug: {
-  //       eq: "animals",
-  //     },
-  //   },
-  // };
+  categories = {
+    categories: {
+      slug: {
+        eq: "fidgets",
+      },
+    },
+  };
 
   for (let i = INITIAL_PAGE; i < TOTAL_PAGES; i++) {
     const res = await getSlugsApi(jwt, 24, i, categories);
